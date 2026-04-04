@@ -8,7 +8,7 @@ const episodeSelect = document.getElementById("episodeSelect");
 let allEpisodes = [];
 
 // ========================
-// ⏳ Loading message
+// Loading message
 // ========================
 root.innerHTML = "<p style='text-align:center;'>Loading episodes... ⏳</p>";
 
@@ -38,7 +38,7 @@ fetch("https://api.tvmaze.com/shows/82/episodes")
   });
 
 // ========================
-// 🔎 Search
+// Search
 // ========================
 searchInput.addEventListener("input", () => {
   const searchTerm = searchInput.value.toLowerCase();
@@ -54,7 +54,7 @@ searchInput.addEventListener("input", () => {
 });
 
 // ========================
-// 📺 Display episodes
+// Display episodes
 // ========================
 function displayEpisodes(episodes) {
   root.innerHTML = "";
@@ -80,7 +80,7 @@ function displayEpisodes(episodes) {
 }
 
 // ========================
-// 🔽 Dropdown
+// Dropdown
 // ========================
 function populateDropdown(episodes) {
   episodeSelect.innerHTML = `<option value="">All Episodes</option>`;
@@ -97,7 +97,7 @@ function populateDropdown(episodes) {
 }
 
 // ========================
-// 🎯 Jump to episode
+// Jump to episode
 // ========================
 episodeSelect.addEventListener("change", () => {
   const selectedId = episodeSelect.value;
@@ -118,7 +118,7 @@ episodeSelect.addEventListener("change", () => {
 });
 
 // ========================
-// 🔢 Format SxxExx
+// Format SxxExx
 // ========================
 function formatEpisodeCode(season, number) {
   const s = String(season).padStart(2, "0");
