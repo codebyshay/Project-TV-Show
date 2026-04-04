@@ -1,20 +1,19 @@
-// عناصر الصفحة
+
 const root = document.getElementById("root");
 const searchInput = document.getElementById("searchInput");
 const resultsCount = document.getElementById("resultsCount");
 const episodeSelect = document.getElementById("episodeSelect");
 
-// تخزين الحلقات
 let allEpisodes = [];
 
-// ========================
+
 // Loading message
-// ========================
+
 root.innerHTML = "<p style='text-align:center;'>Loading episodes... ⏳</p>";
 
-// ========================
+
 // Fetch data (ONLY ONCE)
-// ========================
+
 fetch("https://api.tvmaze.com/shows/82/episodes")
   .then((response) => {
     if (!response.ok) {
@@ -37,9 +36,9 @@ fetch("https://api.tvmaze.com/shows/82/episodes")
     console.error(error);
   });
 
-// ========================
+
 // Search
-// ========================
+
 searchInput.addEventListener("input", () => {
   const searchTerm = searchInput.value.toLowerCase();
 
@@ -53,9 +52,9 @@ searchInput.addEventListener("input", () => {
   displayEpisodes(filtered);
 });
 
-// ========================
+
 // Display episodes
-// ========================
+
 function displayEpisodes(episodes) {
   root.innerHTML = "";
 
@@ -79,9 +78,9 @@ function displayEpisodes(episodes) {
   });
 }
 
-// ========================
+
 // Dropdown
-// ========================
+
 function populateDropdown(episodes) {
   episodeSelect.innerHTML = `<option value="">All Episodes</option>`;
 
@@ -96,9 +95,9 @@ function populateDropdown(episodes) {
   });
 }
 
-// ========================
+
 // Jump to episode
-// ========================
+
 episodeSelect.addEventListener("change", () => {
   const selectedId = episodeSelect.value;
 
@@ -117,9 +116,9 @@ episodeSelect.addEventListener("change", () => {
   }
 });
 
-// ========================
+
 // Format SxxExx
-// ========================
+
 function formatEpisodeCode(season, number) {
   const s = String(season).padStart(2, "0");
   const e = String(number).padStart(2, "0");
