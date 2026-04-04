@@ -21,12 +21,13 @@ h1 {
 
 /* Episode Card */
 .episode {
-  background: #fff;
-  color: #2b0000;
+  background: #660033;
+  color: #ffffff;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
 .episode:hover {
@@ -35,7 +36,7 @@ h1 {
 }
 
 .episode h3 {
-  background: #990000;
+  background: #660033;
   color: white;
   margin: 0;
   padding: 10px;
