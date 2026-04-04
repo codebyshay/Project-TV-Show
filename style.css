@@ -1,3 +1,72 @@
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #2b0000, #660000);
+  margin: 0;
+  color: #fff;
+}
+
+h1 {
+  text-align: center;
+  padding: 20px;
+  margin: 0;
+  color: #ffcccc;
+}
+
 #root {
-  color: red;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+/* Episode Card */
+.episode {
+  background: #fff;
+  color: #2b0000;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.episode:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+}
+
+.episode h3 {
+  background: #990000;
+  color: white;
+  margin: 0;
+  padding: 10px;
+  font-size: 14px;
+}
+
+/* Image */
+.episode img {
+  width: 100%;
+  display: block;
+}
+
+/* Summary */
+.episode p {
+  padding: 10px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 20px;
+  background: #1a0000;
+}
+
+footer a {
+  color: #ff6666;
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
 }
