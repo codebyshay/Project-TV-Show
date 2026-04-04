@@ -1,103 +1,127 @@
+// عناصر الصفحة
 const root = document.getElementById("root");
-// Example show: Game of Thrones (id = 82)
-const url = "https://api.tvmaze.com/shows/82/episodes";
+const searchInput = document.getElementById("searchInput");
+const resultsCount = document.getElementById("resultsCount");
+const episodeSelect = document.getElementById("episodeSelect");
 
-// Store all episodes so we can filter them later
+// تخزين الحلقات
 let allEpisodes = [];
 
-fetch(url)
-  .then((response) => response.json())
+// ========================
+// ⏳ Loading message
+// ========================
+root.innerHTML = "<p style='text-align:center;'>Loading episodes... ⏳</p>";
+
+// ========================
+// Fetch data (ONLY ONCE)
+// ========================
+fetch("https://api.tvmaze.com/shows/82/episodes")
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error("Failed to fetch");
+    }
+    return response.json();
+  })
   .then((episodes) => {
-    // Save episodes to the allEpisodes variable
     allEpisodes = episodes;
 
-    // Create the search input
-    const searchInput = document.createElement("input");
-    searchInput.type = "text";
-    searchInput.placeholder = "Search episodes...";
-    searchInput.id = "search-input";
-
-    // Create the count display
-    const countDisplay = document.createElement("p");
-    countDisplay.id = "count-display";
-
-    // Add search input and count to the page before the cards
-    document.body.insertBefore(searchInput, root);
-    document.body.insertBefore(countDisplay, root);
-
-    // Show all episodes initially
+    populateDropdown(allEpisodes);
     displayEpisodes(allEpisodes);
-    createEpisodeSelector(allEpisodes);
-
-    // Listen for keystrokes in the search box
-    searchInput.addEventListener("input", () => {
-      const searchTerm = searchInput.value.toLowerCase();
-      const filtered = allEpisodes.filter((ep) => {
-        return (
-          ep.name.toLowerCase().includes(searchTerm) ||
-          ep.summary.toLowerCase().includes(searchTerm)
-        );
-      });
-      displayEpisodes(filtered);
-    });
+  })
+  .catch((error) => {
+    root.innerHTML = `
+      <p style="color:red; text-align:center;">
+        ❌ Failed to load episodes. Please try again later.
+      </p>
+    `;
+    console.error(error);
   });
 
-// Display a list of episodes and update the count
+// ========================
+// 🔎 Search
+// ========================
+searchInput.addEventListener("input", () => {
+  const searchTerm = searchInput.value.toLowerCase();
+
+  const filtered = allEpisodes.filter((ep) => {
+    return (
+      ep.name.toLowerCase().includes(searchTerm) ||
+      (ep.summary || "").toLowerCase().includes(searchTerm)
+    );
+  });
+
+  displayEpisodes(filtered);
+});
+
+// ========================
+// 📺 Display episodes
+// ========================
 function displayEpisodes(episodes) {
   root.innerHTML = "";
-  const countDisplay = document.getElementById("count-display");
-  countDisplay.textContent = `Showing ${episodes.length} episode(s)`;
+
+  resultsCount.textContent =
+    `Displaying ${episodes.length} / ${allEpisodes.length} episodes`;
 
   episodes.forEach((ep) => {
-    const episodeCode = formatEpisodeCode(ep.season, ep.number);
+    const code = formatEpisodeCode(ep.season, ep.number);
+
     const div = document.createElement("div");
-    div.id = `episode-${ep.id}`;
     div.className = "episode";
+    div.id = `episode-${ep.id}`;
+
     div.innerHTML = `
-      <h3>${episodeCode} - ${ep.name}</h3>
+      <h3>${code} - ${ep.name}</h3>
       <img src="${ep.image?.medium || ""}" alt="${ep.name}">
-      <p>${ep.summary || "No summary available"}</p>
+      <p>${(ep.summary || "").replace(/<[^>]+>/g, "")}</p>
     `;
+
     root.appendChild(div);
   });
 }
 
-function formatEpisodeCode(season, number) {
-  // Shows season number
-  const s = String(season).padStart(2, "0");
-  // Shows episode number
-  const e = String(number).padStart(2, "0");
-  return `S${s}E${e}`;
-}
+// ========================
+// 🔽 Dropdown
+// ========================
+function populateDropdown(episodes) {
+  episodeSelect.innerHTML = `<option value="">All Episodes</option>`;
 
-// Create the episode selector dropdown
-function createEpisodeSelector(episodes) {
-  const select = document.createElement("select");
-  select.id = "episode-selector";
-
-  // Add a default option
-  const defaultOption = document.createElement("option");
-  defaultOption.textContent = "Select an episode...";
-  defaultOption.value = "";
-  select.appendChild(defaultOption);
-
-  // Add an option for each episode
   episodes.forEach((ep) => {
     const option = document.createElement("option");
-    const episodeCode = formatEpisodeCode(ep.season, ep.number);
-    option.textContent = `${episodeCode} - ${ep.name}`;
+    const code = formatEpisodeCode(ep.season, ep.number);
+
     option.value = ep.id;
-    select.appendChild(option);
-  });
+    option.textContent = `${code} - ${ep.name}`;
 
-  // When user selects an episode, scroll to it
-  select.addEventListener("change", () => {
-    const selectedId = select.value;
-    const episodeDiv = document.getElementById(`episode-${selectedId}`);
-    if (episodeDiv) {
-      episodeDiv.scrollIntoView({ behavior: "smooth" });
-    }
+    episodeSelect.appendChild(option);
   });
+}
 
-  document.body.insertBefore(select, root);
+// ========================
+// 🎯 Jump to episode
+// ========================
+episodeSelect.addEventListener("change", () => {
+  const selectedId = episodeSelect.value;
+
+  if (!selectedId) {
+    displayEpisodes(allEpisodes);
+    return;
+  }
+
+  // Ensure all episodes are visible before scrolling
+  displayEpisodes(allEpisodes);
+
+  const element = document.getElementById(`episode-${selectedId}`);
+
+  if (element) {
+    element.scrollIntoView({ behavior: "smooth" });
+  }
+});
+
+// ========================
+// 🔢 Format SxxExx
+// ========================
+function formatEpisodeCode(season, number) {
+  const s = String(season).padStart(2, "0");
+  const e = String(number).padStart(2, "0");
+  return `S${s}E${e}`;
 }

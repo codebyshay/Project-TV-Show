@@ -2,17 +2,30 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Shuheda(codebyshay)</title>
+    <title>Shuheda (codebyshay)</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <h1>TV Show Episodes</h1>
 
+    <!-- Controls -->
+    <div id="controls">
+      <input id="searchInput" placeholder="Search episodes..." />
+      <p id="resultsCount"></p>
+
+      <select id="episodeSelect">
+        <option value="">All Episodes</option>
+      </select>
+    </div>
+
+    <!-- Episodes -->
     <div id="root"></div>
-    <script src="script.js"></script>
+
     <footer>
       Data originally from
       <a href="https://www.tvmaze.com/" target="_blank">TVMaze.com</a>
     </footer>
+
+    <script src="script.js"></script>
   </body>
 </html>

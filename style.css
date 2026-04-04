@@ -12,6 +12,38 @@ h1 {
   color: #ffcccc;
 }
 
+/* Controls (search + dropdown) */
+#controls {
+  text-align: center;
+  padding: 20px;
+}
+
+#searchInput,
+#episodeSelect {
+  display: block;
+  margin: 10px auto;
+  padding: 10px 15px;
+  width: 50%;
+  max-width: 400px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: #1a0000;
+  color: #fff;
+  outline: none;
+}
+
+#searchInput::placeholder {
+  color: #ff9999;
+}
+
+#resultsCount {
+  color: #ffcccc;
+  font-size: 0.9rem;
+  margin: 5px 0;
+}
+
+/* Episode grid */
 #root {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -19,17 +51,13 @@ h1 {
   padding: 20px;
 }
 
-/* Episode Card */
+/* Episode card */
 .episode {
   background: #660033;
-  color: #ffffff;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .episode:hover {
@@ -38,20 +66,18 @@ h1 {
 }
 
 .episode h3 {
-  background: #660033;
+  background: #990000;
   color: white;
   margin: 0;
   padding: 10px;
   font-size: 14px;
 }
 
-/* Image */
 .episode img {
   width: 100%;
   display: block;
 }
 
-/* Summary */
 .episode p {
   padding: 10px;
   font-size: 14px;
@@ -72,44 +98,4 @@ footer a {
 
 footer a:hover {
   text-decoration: underline;
-}
-
-/* Search input */
-#search-input {
-  display: block;
-  margin: 20px auto;
-  padding: 10px 15px;
-  width: 50%;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  background: #1a0000;
-  color: #fff;
-  outline: none;
-}
-
-#search-input::placeholder {
-  color: #ff9999;
-}
-
-/* Episode count display */
-#count-display {
-  text-align: center;
-  color: #ffcccc;
-  font-size: 0.9rem;
-  margin: 0;
-}
-
-/* Episode selector dropdown */
-#episode-selector {
-  display: block;
-  margin: 10px auto 20px;
-  padding: 10px 15px;
-  width: 50%;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  background: #1a0000;
-  color: #fff;
-  cursor: pointer;
 }
