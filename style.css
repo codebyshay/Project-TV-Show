@@ -132,3 +132,31 @@ footer a {
 footer a:hover {
   text-decoration: underline;
 }
+
+.show-card {
+  background: #330000;
+  border-radius: 12px;
+  padding: 15px;
+  margin: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.show-card:hover {
+  transform: scale(1.02);
+}
+#showsRoot {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.show-card img {
+  width: 100%;
+  border-radius: 8px;
+}
+
+.hidden {
+  display: none;
+}
