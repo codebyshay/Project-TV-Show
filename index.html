@@ -7,10 +7,16 @@
   </head>
   <body>
     <h1>TV Show Episodes</h1>
-
+<a href="#" id="backToShows" style="display:none; text-align:center; display:block; margin:10px;">
+  ← Back to all shows
+</a>
     <!-- Controls -->
     <div id="controls">
       <!-- Show selector -->
+  <input
+  id="showSearchInput"
+  placeholder="Search shows..."
+/>
       <select id="showSelect">
         <option value="">Select a show</option>
       </select>
@@ -19,11 +25,12 @@
       <p id="resultsCount"></p>
       <!-- Episode selector-->
       <select id="episodeSelect">
-        <option value="">All Episodes</option>
+        <option value="">Select a show</option>
       </select>
     </div>
 
     <!-- Episodes -->
+    <div id="showsRoot"></div>
     <div id="root"></div>
 
     <footer>
