@@ -99,7 +99,7 @@ episodeSelect.addEventListener("change", () => {
     (ep) => ep.id === Number(selectedId),
   );
   // Ensure all episodes are visible before scrolling
-  displayEpisodes(allEpisodes);
+  displayEpisodes(selectedEpisode);
 });
 
 // Format season and episode numbers into SxxExx
