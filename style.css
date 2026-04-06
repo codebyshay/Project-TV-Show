@@ -102,6 +102,21 @@ h1 {
   padding: 20px;
 }
 
+/* Show selector */
+#showSelect {
+  display: block;
+  margin: 10px auto;
+  padding: 10px 15px;
+  width: 50%;
+  max-width: 400px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: #1a0000;
+  color: #fff;
+  outline: none;
+}
+
 /* Footer */
 footer {
   text-align: center;
