@@ -7,29 +7,86 @@ const episodeSelect = document.getElementById("episodeSelect");
 // Holds all episodes after they are fetched
 let allEpisodes = [];
 
+// Cache fetched episode lists so we never fetch the same show twice
+const episodeCache = {};
+
 // Let the user know the page is loading
 root.innerHTML = "<p style='text-align:center;'>Loading episodes... ⏳</p>";
 
-// Fetch the full episode list from TVMaze when the page first loads
-fetch("https://api.tvmaze.com/shows/82/episodes")
+// Fetch all shows from TVMaze when the page first loads
+fetch("https://api.tvmaze.com/shows")
   .then((response) => {
     if (!response.ok) {
       throw new Error("Failed to fetch");
     }
     return response.json();
   })
-  .then((episodes) => {
-    allEpisodes = episodes;
-    // Fill in the dropdown and show all episodes on first load
-    populateDropdown(allEpisodes);
-    displayEpisodes(allEpisodes);
+  .then((shows) => {
+    // Sort shows alphabetically, case-sensitive
+    shows.sort((a, b) =>
+      a.name.toLowerCase().localeCompare(b.name.toLowerCase()),
+    );
+
+    // Add each show as an option in the show selector
+    shows.forEach((show) => {
+      const option = document.createElement("option");
+      option.value = show.id;
+      option.textContent = show.name;
+      showSelect.appendChild(option);
+    });
+    root.innerHTML =
+      "<p class='loading-message'>Select a show to get started</p>";
   })
   .catch((error) => {
-    // If something goes wrong, show a message on the page instead of the console
+    // If something goes wrong, show a message on the page
     root.innerHTML =
-      "<p class= 'error message'>❌ Failed to load episodes. Please try again later.</p>";
+      "<p class='error-message'>❌ Something went wrong loading shows. Please try again later.</p>";
     console.error(error);
   });
+
+// Fetch episodes for the selected show when the user makes a selection
+showSelect.addEventListener("change", () => {
+  const selectedShowId = showSelect.value;
+
+  if (!selectedShowId) return;
+
+  // Show a loading message while episodes are being fetched
+  root.innerHTML =
+    "<p class='loading-message'>Loading episodes... please wait</p>";
+
+  // Use cached episodes if we have already fetched this show
+  if (episodeCache[selectedShowId]) {
+    allEpisodes = episodeCache[selectedShowId];
+    searchInput.value = "";
+    populateDropdown(allEpisodes);
+    displayEpisodes(allEpisodes);
+    return;
+  }
+
+  fetch(`https://api.tvmaze.com/shows/${selectedShowId}/episodes`)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Failed to fetch episodes");
+      }
+      return response.json();
+    })
+    .then((episodes) => {
+      // Save to cache so we don't fetch this show again
+      episodeCache[selectedShowId] = episodes;
+      allEpisodes = episodes;
+      // Reset search for the new show
+      searchInput.value = "";
+      // Fill in the dropdown and show all episodes on first load
+      populateDropdown(allEpisodes);
+      displayEpisodes(allEpisodes);
+    })
+    .catch((error) => {
+      // If something goes wrong, show a message on the page instead of the console
+      root.innerHTML =
+        "<p class= 'error message'>❌ Failed to load episodes. Please try again later.</p>";
+      console.error(error);
+    });
+});
 
 // |Re-filter the episode list each time the user types in the search box
 searchInput.addEventListener("input", () => {
