@@ -169,3 +169,11 @@ footer a:hover {
   gap: 10px;
   margin: 15px 0;
 }
+
+#backToShows {
+  display: none;
+  text-align: center;
+  margin: 10px;
+  color: #ffcccc;
+  cursor: pointer;
+}

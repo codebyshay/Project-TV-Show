@@ -9,6 +9,11 @@ const resultsCount = document.getElementById("resultsCount");
 const episodeSelect = document.getElementById("episodeSelect");
 const showResultsCount = document.getElementById("showResultsCount");
 
+// ================= INITIAL VIEW STATE =================
+showsRoot.style.display = "grid";   // show shows list
+root.style.display = "none";        // hide episodes list
+backToShows.style.display = "none"; // hide back button 
+
 // STATE
 let allShows = [];
 let allEpisodes = [];
@@ -82,6 +87,8 @@ showSearchInput.addEventListener("input", () => {
 function loadShowEpisodes(showId) {
   showsRoot.style.display = "none";
   root.style.display = "block";
+
+  backToShows.style.display = "block";
 
   searchInput.value = "";
   resultsCount.textContent = "";
@@ -174,12 +181,21 @@ episodeSelect.addEventListener("change", () => {
 });
 
 // ===================== BACK BUTTON =====================
-backToShows.addEventListener("click", () => {
-  root.style.display = "none";
-  showsRoot.style.display = "grid";
+backToShows.addEventListener("click", (e) => {
+  e.preventDefault();
 
+  // show shows view
+  showsRoot.style.display = "grid";
+  root.style.display = "none";
+
+  // hide back button again
+  backToShows.style.display = "none";
+
+  // reset episode UI
+  allEpisodes = [];
   searchInput.value = "";
-  showSearchInput.value = "";
+  resultsCount.textContent = "";
+  episodeSelect.innerHTML = `<option value="">All Episodes</option>`;
 });
 
 // ===================== HELPERS =====================
@@ -193,7 +209,7 @@ function populateShowDropdown(shows) {
     showSelect.appendChild(option);
   });
 }
-
 function formatEpisodeCode(season, number) {
   return `S${String(season).padStart(2, "0")}E${String(number).padStart(2, "0")}`;
 }
+
