@@ -193,4 +193,7 @@ function populateShowDropdown(shows) {
     showSelect.appendChild(option);
   });
 }
+function formatEpisodeCode(season, number) {
+  return `S${String(season).padStart(2, "0")}E${String(number).padStart(2, "0")}`;
+}
 
