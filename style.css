@@ -169,3 +169,19 @@ footer a:hover {
   gap: 10px;
   margin: 15px 0;
 }
+
+#backToShows {
+  display: none;
+  text-align: center;
+  margin: 10px;
+  color: #ffcccc;
+  cursor: pointer;
+}
+
+#backToEpisodes {
+  display: none;
+  text-align: center;
+  color: #ffcccc;
+  cursor: pointer;
+  margin: 10px;
+}

@@ -1,4 +1,5 @@
 // DOM ELEMENTS
+const backToEpisodes = document.getElementById("backToEpisodes");
 const showsRoot = document.getElementById("showsRoot");
 const showSelect = document.getElementById("showSelect");
 const backToShows = document.getElementById("backToShows");
@@ -8,13 +9,25 @@ const searchInput = document.getElementById("searchInput");
 const resultsCount = document.getElementById("resultsCount");
 const episodeSelect = document.getElementById("episodeSelect");
 const showResultsCount = document.getElementById("showResultsCount");
+const episodeControls = document.getElementById("episodeControls");
+const showControls = document.getElementById("showControls");
+
+// ================= INITIAL VIEW STATE =================
+showsRoot.style.display = "grid";
+root.style.display = "none";
+
+showControls.style.display = "flex";
+episodeControls.style.display = "none";
+
+backToShows.style.display = "none";
+backToEpisodes.style.display = "none";
 
 // STATE
 let allShows = [];
 let allEpisodes = [];
 const episodeCache = {};
 
-// INITIAL UI 
+// INITIAL UI
 root.innerHTML = "<p>Loading shows...</p>";
 showsRoot.innerHTML = "";
 
@@ -23,7 +36,7 @@ fetch("https://api.tvmaze.com/shows")
   .then((res) => res.json())
   .then((shows) => {
     allShows = shows.sort((a, b) =>
-      a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+      a.name.toLowerCase().localeCompare(b.name.toLowerCase()),
     );
 
     populateShowDropdown(allShows);
@@ -40,8 +53,7 @@ function renderShows(shows) {
   showsRoot.innerHTML = "";
 
   // 👇 UPDATE COUNTER HERE
-  showResultsCount.textContent =
-    `Displaying ${shows.length} / ${allShows.length} shows`;
+  showResultsCount.textContent = `Displaying ${shows.length} / ${allShows.length} shows`;
 
   shows.forEach((show) => {
     const card = document.createElement("div");
@@ -82,6 +94,10 @@ showSearchInput.addEventListener("input", () => {
 function loadShowEpisodes(showId) {
   showsRoot.style.display = "none";
   root.style.display = "block";
+  showControls.style.display = "none";
+  episodeControls.style.display = "flex";
+
+  backToShows.style.display = "block";
 
   searchInput.value = "";
   resultsCount.textContent = "";
@@ -103,8 +119,7 @@ function loadShowEpisodes(showId) {
       setupEpisodes(allEpisodes);
     })
     .catch((err) => {
-      root.innerHTML =
-        "<p class='error'>Failed to load episodes.</p>";
+      root.innerHTML = "<p class='error'>Failed to load episodes.</p>";
       console.error(err);
     });
 }
@@ -119,8 +134,7 @@ function setupEpisodes(episodes) {
 function displayEpisodes(episodes) {
   root.innerHTML = "";
 
-  resultsCount.textContent =
-    `Displaying ${episodes.length} / ${allEpisodes.length} episodes`;
+  resultsCount.textContent = `Displaying ${episodes.length} / ${allEpisodes.length} episodes`;
 
   episodes.forEach((ep) => {
     const div = document.createElement("div");
@@ -167,19 +181,41 @@ episodeSelect.addEventListener("change", () => {
 
   if (!id) {
     displayEpisodes(allEpisodes);
+    backToEpisodes.style.display = "none";
     return;
   }
 
-  displayEpisodes(allEpisodes.filter(ep => ep.id == id));
+  displayEpisodes(allEpisodes.filter((ep) => ep.id == id));
+
+  backToEpisodes.style.display = "block";
 });
 
 // ===================== BACK BUTTON =====================
-backToShows.addEventListener("click", () => {
-  root.style.display = "none";
-  showsRoot.style.display = "grid";
+backToShows.addEventListener("click", (e) => {
+  e.preventDefault();
 
+  // show shows view
+  showsRoot.style.display = "grid";
+  root.style.display = "none";
+
+  showControls.style.display = "flex";
+  episodeControls.style.display = "none";
+  // hide back button again
+  backToShows.style.display = "none";
+
+  // reset episode UI
+  allEpisodes = [];
   searchInput.value = "";
-  showSearchInput.value = "";
+  resultsCount.textContent = "";
+  episodeSelect.innerHTML = `<option value="">All Episodes</option>`;
+});
+
+backToEpisodes.addEventListener("click", (e) => {
+  e.preventDefault();
+
+  displayEpisodes(allEpisodes);
+  episodeSelect.value = "";
+  backToEpisodes.style.display = "none";
 });
 
 // ===================== HELPERS =====================
@@ -193,7 +229,6 @@ function populateShowDropdown(shows) {
     showSelect.appendChild(option);
   });
 }
-
 function formatEpisodeCode(season, number) {
   return `S${String(season).padStart(2, "0")}E${String(number).padStart(2, "0")}`;
 }
