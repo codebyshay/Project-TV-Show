@@ -1,4 +1,5 @@
 // DOM ELEMENTS
+const backToEpisodes = document.getElementById("backToEpisodes");
 const showsRoot = document.getElementById("showsRoot");
 const showSelect = document.getElementById("showSelect");
 const backToShows = document.getElementById("backToShows");
@@ -12,11 +13,14 @@ const episodeControls = document.getElementById("episodeControls");
 const showControls = document.getElementById("showControls");
 
 // ================= INITIAL VIEW STATE =================
-showsRoot.style.display = "grid"; // show shows list
-root.style.display = "none"; // hide episodes list
-backToShows.style.display = "none"; // hide back button
+showsRoot.style.display = "grid";
+root.style.display = "none";
 
+showControls.style.display = "flex";
 episodeControls.style.display = "none";
+
+backToShows.style.display = "none";
+backToEpisodes.style.display = "none";
 
 // STATE
 let allShows = [];
@@ -177,10 +181,13 @@ episodeSelect.addEventListener("change", () => {
 
   if (!id) {
     displayEpisodes(allEpisodes);
+    backToEpisodes.style.display = "none";
     return;
   }
 
   displayEpisodes(allEpisodes.filter((ep) => ep.id == id));
+
+  backToEpisodes.style.display = "block";
 });
 
 // ===================== BACK BUTTON =====================
@@ -201,6 +208,14 @@ backToShows.addEventListener("click", (e) => {
   searchInput.value = "";
   resultsCount.textContent = "";
   episodeSelect.innerHTML = `<option value="">All Episodes</option>`;
+});
+
+backToEpisodes.addEventListener("click", (e) => {
+  e.preventDefault();
+
+  displayEpisodes(allEpisodes);
+  episodeSelect.value = "";
+  backToEpisodes.style.display = "none";
 });
 
 // ===================== HELPERS =====================

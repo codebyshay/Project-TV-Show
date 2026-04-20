@@ -177,3 +177,11 @@ footer a:hover {
   color: #ffcccc;
   cursor: pointer;
 }
+
+#backToEpisodes {
+  display: none;
+  text-align: center;
+  color: #ffcccc;
+  cursor: pointer;
+  margin: 10px;
+}
